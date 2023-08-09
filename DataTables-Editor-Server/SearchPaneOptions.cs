@@ -223,7 +223,7 @@ namespace DataTables
 
             // If the table is not yet set then set the table variable to be the same as editor
             // This is not taking a value from the SearchPaneOptions instance as the table should be defined in value/label. This throws up errors if not.
-            var table = editor.Table()[0];
+            var table = editor.Table().Count() > 0 ? editor.Table()[0] : "";
             var readTable = editor.ReadTable();
 
             if (_table != null) {
@@ -330,6 +330,7 @@ namespace DataTables
                 // Construct the where queries based upon the options selected by the user
                 for(int i = 0; i < fields.Count(); i++) {
                     var add = false;
+			if (fields[i] != null){
                     var fieldName = fields[i].Name();
 
                     // If there is a last value set then a slightly different set of results is required for cascade
@@ -356,6 +357,7 @@ namespace DataTables
                             }
                         });
                     }
+			}
                 }
 
                 var entriesRows = entriesQuery
@@ -374,7 +376,7 @@ namespace DataTables
 
             foreach(var row in rows) {
                 var val = row["value"].ToString();
-                Int64? total = row.ContainsKey("total") ? (Int64?)row["total"] : null;
+                Int64? total = row.ContainsKey("total") ? (Int64?)(int)row["total"] : null;
                 Int64? count = total;
 
                 if (entries != null) {
